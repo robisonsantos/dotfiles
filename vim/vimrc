@@ -1,0 +1,186 @@
+" call plug#begin('~/.config/nvim/plugged')
+" https://github.com/junegunn/vim-plug
+call plug#begin()
+
+Plug 'https://github.com/Shougo/denite.nvim.git'
+Plug 'https://github.com/majutsushi/tagbar.git'
+
+Plug 'rking/ag.vim'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+Plug 'vim-airline/vim-airline'
+Plug 'chriskempson/vim-tomorrow-theme'
+
+call plug#end()
+" end plugin management
+
+"---- Settings ------
+
+
+" Switch syntax highlighing on
+syntax on
+
+" Use vim not vi api
+set nocompatible
+
+" Command history
+set history=100
+
+" Always show cursor
+set ruler
+
+" Show incomplete commands
+set showcmd
+
+" Increment searching (search as you type)
+set incsearch
+
+" Highligh search matches
+set hlsearch
+
+" Ignore case search
+set smartcase
+
+" Make sure any searches /searchPhrase doesn't need the \c character
+set ignorecase
+
+" Turn word warp off
+set nowrap
+
+" Allow backspace to delete end of line, indent and start of line characters
+set backspace=indent,eol,start
+
+" Convert tabs to spaces
+set expandtab
+
+" Set tab size in spaces (this is for manual indenting)
+set tabstop=4
+
+" The number of spaces inserted for a tab (used for auto indenting)
+set shiftwidth=4
+
+" Turn on line numbers
+set number
+
+" Highlight tailing whitespace
+" See issue: https://github.com/Integralist/ProVim/issues/4
+set list listchars=tab:\ \ ,trail:·
+
+" Get rid of the delay when pressing O (for example)
+" http://stackoverflow.com/questions/2158516/vim-delay-before-o-opens-a-new-line
+set timeout timeoutlen=1000 ttimeoutlen=100
+
+" Always show status bar
+set laststatus=2
+
+" Set the status line to something useful
+set statusline=%f\ %=L:%l/%L\ %c\ (%p%%)
+
+" Hide the toolbar
+set guioptions-=T
+
+" UTF encoding
+set encoding=utf-8
+
+" Autoload files that have changed outside of vim
+set autoread
+
+" Don't show intro
+set shortmess+=I
+
+" Highlight the current line
+set cursorline
+
+" Ensure Vim doesn't beep at you every time you make a mistype
+set visualbell
+
+" Visual autocomplete for command menu (e.g. :e ~/path/to/file)
+set wildmenu
+
+" redraw only when we need to (i.e. don't redraw when executing a macro)
+set lazyredraw
+
+" highlight a matching [{()}] when cursor is placed on start/end character
+set showmatch
+
+" This will set your path variable to current directory (from which you
+" launched vim) and to all directories under current directory recursively.
+" See http://vim.wikia.com/wiki/Project_browsing_using_find
+set path=$PWD/**
+
+" See http://vim.wikia.com/wiki/Great_wildmode/wildmenu_and_console_mouse
+set wildmenu
+set wildmode=list:longest,full
+
+" Tagbar (shows a side window with tags found in the current file)
+nmap <F8> :TagbarToggle<CR>
+
+" Denite (fuzzy finder)
+nmap <C-f> :Denite file buffer<CR>
+
+" ag.vim will always look from root instead of cwd
+let g:ag_working_path_mode="r"
+
+" Open nerdtree with control-n
+map <C-n> :NERDTreeToggle<CR>
+
+" Use deoplete.
+let g:deoplete#enable_at_startup=1
+
+" Set paste mode
+nmap <F9> :set paste<CR>
+
+" Tabularize
+map <Leader>e :Tabularize /=<cr>
+map <Leader>c :Tabularize /:<cr>
+map <Leader>es :Tabularize /=\zs<cr>
+map <Leader>cs :Tabularize /:\zs<cr>
+
+" Camel Case Motion (for dealing with programming code)
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+sunmap w
+sunmap b
+sunmap e
+
+" Clear search buffer
+:nnoremap § :nohlsearch<cr>
+
+" Command to use sudo when needed
+cmap w!! %!sudo tee > /dev/null %
+
+" Theme
+set background=light
+colorscheme Tomorrow-Night
+
+" Airline (status line)
+let g:airline_powerline_fonts=1
+
+" ---
+" jump to last cursor
+autocmd BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal g`\"" |
+  \ endif
+
+fun! StripTrailingWhitespace()
+  " don't strip on these filetypes
+  if &ft =~ 'markdown'
+    return
+  endif
+  %s/\s\+$//e
+endfun
+autocmd BufWritePre * call StripTrailingWhitespace()
+
+" file formats
+autocmd Filetype gitcommit setlocal spell textwidth=72
+autocmd Filetype markdown setlocal wrap linebreak nolist textwidth=0 wrapmargin=0 " http://vim.wikia.com/wiki/Word_wrap_without_line_breaks
+autocmd FileType html,sh,cucumber,ruby,yaml,zsh,vim setlocal shiftwidth=2 tabstop=2 expandtab
+
+" specify syntax highlightinget paste
+" for specific files
+autocmd Bufread,BufNewFile *.spv set filetype=php
+autocmd Bufread,BufNewFile *.md set filetype=markdown " Vim interprets .md as 'modula2' otherwise, see :set filetype?
+
