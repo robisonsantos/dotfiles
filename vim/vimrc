@@ -11,6 +11,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'vim-airline/vim-airline'
 Plug 'chriskempson/vim-tomorrow-theme'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 " end plugin management
@@ -62,6 +63,7 @@ set shiftwidth=4
 
 " Turn on line numbers
 set number
+set relativenumber
 
 " Highlight tailing whitespace
 " See issue: https://github.com/Integralist/ProVim/issues/4
@@ -103,6 +105,9 @@ set lazyredraw
 
 " highlight a matching [{()}] when cursor is placed on start/end character
 set showmatch
+
+" use system clipboard
+set clipboard=unnamed
 
 " This will set your path variable to current directory (from which you
 " launched vim) and to all directories under current directory recursively.
@@ -183,4 +188,3 @@ autocmd FileType html,sh,cucumber,ruby,yaml,zsh,vim setlocal shiftwidth=2 tabsto
 " for specific files
 autocmd Bufread,BufNewFile *.spv set filetype=php
 autocmd Bufread,BufNewFile *.md set filetype=markdown " Vim interprets .md as 'modula2' otherwise, see :set filetype?
-
